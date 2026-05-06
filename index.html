@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Gallary</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section>
+      <h1>Quote Gallary</h1>
+      <div id="quotes">
+        <script>
+          const quotesSection = document.getElementById("quotes");
+          fetch("https://api.freeapi.app/api/v1/public/quotes", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }).then(async (response) => {
+            const data = await response.json();
+            const quotes = data.data.data;
+            console.log(quotes);
+            quotes.map((quote) => {
+              const div = document.createElement("div");
+              div.id = "quote";
+              const quoteTag = document.createElement("p");
+              const authorTag = document.createElement("p");
+
+              quoteTag.innerText = quote.content;
+              authorTag.innerText = quote.author;
+
+              div.append(quoteTag, authorTag);
+              quotesSection.appendChild(div);
+            });
+          });
+        </script>
+      </div>
+    </section>
+  </body>
+</html>
