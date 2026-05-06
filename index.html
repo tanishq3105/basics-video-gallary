@@ -8,30 +8,55 @@
   </head>
   <body>
     <section>
-      <h1>Quotes Gallary</h1>
-      <div id="quotes">
+      <h1>Video Gallary</h1>
+      <div id="videos">
         <script>
-          const quotesSection = document.getElementById("quotes");
-          fetch("https://api.freeapi.app/api/v1/public/quotes", {
+          const videoSection = document.getElementById("videos");
+          fetch("https://api.freeapi.app/api/v1/public/youtube/videos", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
           }).then(async (response) => {
             const data = await response.json();
-            const quotes = data.data.data;
-            console.log(quotes);
-            quotes.map((quote) => {
+            const videos = data.data.data;
+            console.log(videos);
+            videos.map((video) => {
+              console.log(video);
               const div = document.createElement("div");
-              div.id = "quote";
-              const quoteTag = document.createElement("p");
-              const authorTag = document.createElement("p");
+              div.id = "video";
+              const videoTitle = document.createElement("h3");
+              const channelName = document.createElement("h4");
+              const description = document.createElement("p");
+              const thumbnailUrl = document.createElement("img");
+              const tags = document.createElement("p");
+              const publishedAt = document.createElement("p");
 
-              quoteTag.innerText = quote.content;
-              authorTag.innerText = quote.author;
+              videoTitle.innerText = video.items.snippet.title;
+              channelName.innerText = video.items.snippet.channelTitle;
+              description.innerText =
+                video.items.snippet.description.slice(0, 100) + "....";
+              thumbnailUrl.src = video.items.snippet.thumbnails.high.url;
+              publishedAt.innerText = video.items.snippet.publishedAt;
 
-              div.append(quoteTag, authorTag);
-              quotesSection.appendChild(div);
+              const tagsArray = video.items.snippet.tags || [];
+
+              tagsArray.map((tag) => {
+                const p = document.createElement("p");
+                p.innerText = tag;
+                tags.appendChild(p);
+              });
+
+              div.append(
+                thumbnailUrl,
+                videoTitle,
+                channelName,
+                description,
+                publishedAt,
+                tags,
+              );
+
+              videoSection.appendChild(div);
             });
           });
         </script>
